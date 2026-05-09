@@ -33,7 +33,7 @@ const sampleData = {
       id: crypto.randomUUID(),
       title: "Noite de Ensaio",
       artist: "Stage NL",
-      category: "Espetaculo Demo",
+      category: "Espetáculo Demo",
       genre: "Pop",
       fileName: "",
       lyrics: [
@@ -50,7 +50,7 @@ const sampleData = {
       fileName: "",
       lyrics: [
         { time: 0, text: "Mais uma volta antes de acabar\nToda a gente pronta para saltar", cue: true },
-        { time: 14, text: "Quando o refrao chegar\nNao ha ninguem para parar", cue: false }
+        { time: 14, text: "Quando o refrão chegar\nNão há ninguém para parar", cue: false }
       ]
     }
   ],
@@ -65,7 +65,7 @@ const sampleData = {
 sampleData.playlists = [
   {
     id: crypto.randomUUID(),
-    name: "Atuacao Demo",
+    name: "Atuação Demo",
     songIds: sampleData.songs.map((song) => song.id)
   }
 ];
@@ -210,12 +210,12 @@ function renderSongs() {
   $("#songList").innerHTML = songs.map((song) => `
     <article class="song-card">
       <div>
-        <h3>${esc(song.title || "Sem titulo")}</h3>
+        <h3>${esc(song.title || "Sem título")}</h3>
         <div class="meta">
           <span>${esc(song.artist || "Artista por definir")}</span>
           <span class="tag">${esc(song.category || "Sem categoria")}</span>
-          <span class="tag">${esc(song.genre || "Sem genero")}</span>
-          <span>${esc(song.fileName || "Audio por importar nesta sessao")}</span>
+          <span class="tag">${esc(song.genre || "Sem género")}</span>
+          <span>${esc(song.fileName || "Áudio por importar nesta sessão")}</span>
         </div>
       </div>
       <div class="card-actions">
@@ -224,7 +224,7 @@ function renderSongs() {
         <button data-action="play-song" data-id="${song.id}" class="ghost-button" type="button">Palco</button>
       </div>
     </article>
-  `).join("") || `<p class="muted">Ainda nao ha musicas nesta vista.</p>`;
+  `).join("") || `<p class="muted">Ainda não há músicas nesta vista.</p>`;
 }
 
 function renderEditor() {
@@ -234,7 +234,7 @@ function renderEditor() {
   $("#songArtist").value = song.artist ?? "";
   $("#songCategory").value = song.category ?? "";
   $("#songGenre").value = song.genre ?? "";
-  $("#editorNowPlaying").textContent = `${song.title || "Sem titulo"} ${song.fileName ? `- ${song.fileName}` : "- sem audio carregado"}`;
+  $("#editorNowPlaying").textContent = `${song.title || "Sem título"} ${song.fileName ? `- ${song.fileName}` : "- sem áudio carregado"}`;
   renderSyncLines();
   renderEditorPreview();
 }
@@ -263,7 +263,7 @@ function renderPlaylists() {
   $("#playlistList").innerHTML = state.playlists.map((playlist) => `
     <article class="playlist-card ${playlist.id === state.selectedPlaylistId ? "active" : ""}">
       <h3>${esc(playlist.name)}</h3>
-      <p>${playlist.songIds.length} musicas</p>
+      <p>${playlist.songIds.length} músicas</p>
       <button data-action="select-playlist" data-id="${playlist.id}" type="button">Abrir</button>
     </article>
   `).join("");
@@ -275,12 +275,12 @@ function renderPlaylists() {
     return `
       <div class="playlist-song">
         <strong>${index + 1}</strong>
-        <span>${esc(song?.title ?? "Musica removida")}</span>
+        <span>${esc(song?.title ?? "Música removida")}</span>
         <button data-action="playlist-up" data-index="${index}" class="ghost-button" type="button">Subir</button>
         <button data-action="playlist-remove" data-index="${index}" class="danger-button" type="button">Remover</button>
       </div>
     `;
-  }).join("") || `<p>Adiciona musicas a esta playlist.</p>`;
+  }).join("") || `<p>Adiciona músicas a esta playlist.</p>`;
 
   $("#addSongSelect").innerHTML = state.songs.map((song) => `<option value="${song.id}">${esc(song.title)}</option>`).join("");
 }
@@ -292,7 +292,7 @@ function renderSampler() {
       <input data-pad-label="${pad.id}" type="text" value="${esc(pad.label)}" aria-label="Nome do pad">
       <button data-action="trigger-pad" data-id="${pad.id}" class="pad-trigger" type="button">${esc(pad.label)}</button>
       <label>
-        Audio do efeito
+        Áudio do efeito
         <input data-pad-file="${pad.id}" type="file" accept="audio/*">
       </label>
       <label>
@@ -308,8 +308,8 @@ function renderStage() {
   const song = activeSong();
   const playlist = activePlaylist();
   const nextSong = playlist ? songById(playlist.songIds[state.currentPlaylistIndex + 1]) : null;
-  $("#stageSongTitle").textContent = song ? `${song.title} - ${song.artist || "Artista"}` : "Sem musica";
-  $("#stageNextSong").textContent = `Proxima: ${nextSong?.title ?? "--"}`;
+  $("#stageSongTitle").textContent = song ? `${song.title} - ${song.artist || "Artista"}` : "Sem música";
+  $("#stageNextSong").textContent = `Próxima: ${nextSong?.title ?? "--"}`;
   $("#stagePads").innerHTML = state.pads.map((pad) => `<button data-action="trigger-pad" data-id="${pad.id}" type="button">${esc(pad.label)}</button>`).join("");
   renderKaraoke();
   renderFullPlaylist();
@@ -332,7 +332,7 @@ function renderKaraoke() {
     ${showUpcoming && !showCue ? `<div class="lyric-block upcoming">${esc(nextBlock.text)}</div>` : ""}
   ` : showUpcoming && !showCue ? `
     <div class="lyric-block upcoming">${esc(nextBlock.text)}</div>
-  ` : `<div class="lyric-block empty">${blocks.length ? "A aguardar entrada vocal" : "Seleciona uma musica para comecar."}</div>`;
+  ` : `<div class="lyric-block empty">${blocks.length ? "A aguardar entrada vocal" : "Seleciona uma música para começar."}</div>`;
 
   $("#vocalCountdown").textContent = showCue ? `${Math.max(0, Math.ceil(secondsToNext))}s` : "--";
   updateVocalCue(blocks, currentTime);
@@ -407,7 +407,7 @@ function updateVocalCue(blocks, currentTime) {
   const percent = Math.min(100, (elapsed / interval) * 100);
 
   fill.style.width = `${percent}%`;
-  label.textContent = nextIndex === 0 ? "Primeiro bloco vocal" : "Proximo bloco vocal";
+  label.textContent = nextIndex === 0 ? "Primeiro bloco vocal" : "Próximo bloco vocal";
 }
 
 function renderFullPlaylist() {
@@ -415,7 +415,7 @@ function renderFullPlaylist() {
   $("#fullPlaylist").innerHTML = (playlist?.songIds ?? []).map((id, index) => {
     const song = songById(id);
     const active = index === state.currentPlaylistIndex ? ` aria-current="true"` : "";
-    return `<li${active}>${esc(song?.title ?? "Musica removida")} <small>${esc(song?.artist ?? "")}</small></li>`;
+    return `<li${active}>${esc(song?.title ?? "Música removida")} <small>${esc(song?.artist ?? "")}</small></li>`;
   }).join("");
 }
 
@@ -457,7 +457,7 @@ function fadeOut() {
 function updateSongFromForm() {
   const song = activeSong();
   if (!song) return;
-  song.title = $("#songTitle").value.trim() || "Sem titulo";
+  song.title = $("#songTitle").value.trim() || "Sem título";
   song.artist = $("#songArtist").value.trim();
   song.category = $("#songCategory").value.trim();
   song.genre = $("#songGenre").value.trim();
@@ -519,7 +519,7 @@ function stopEffects() {
 function deleteSong(songId) {
   const song = songById(songId);
   if (!song) return;
-  const ok = confirm(`Apagar "${song.title || "esta musica"}"? Esta acao nao pode ser anulada.`);
+  const ok = confirm(`Apagar "${song.title || "esta música"}"? Esta ação não pode ser anulada.`);
   if (!ok) return;
 
   if (state.selectedSongId === songId) stopMainAudio();
@@ -572,7 +572,7 @@ function bindEvents() {
   $("#searchSongs").addEventListener("input", renderSongs);
   $("#categoryFilter").addEventListener("change", renderSongs);
   $("#newSong").addEventListener("click", () => {
-    const song = { id: crypto.randomUUID(), title: "Nova musica", artist: "", category: "", genre: "", fileName: "", lyrics: [] };
+    const song = { id: crypto.randomUUID(), title: "Nova música", artist: "", category: "", genre: "", fileName: "", lyrics: [] };
     state.songs.unshift(song);
     state.selectedSongId = song.id;
     saveData();
@@ -711,11 +711,11 @@ function bindEvents() {
     if (!file) return;
     let song = activeSong();
     if (!song) {
-      song = { id: crypto.randomUUID(), title: "Nova musica", artist: "", category: "", genre: "", fileName: "", lyrics: [] };
+      song = { id: crypto.randomUUID(), title: "Nova música", artist: "", category: "", genre: "", fileName: "", lyrics: [] };
       state.songs.unshift(song);
       state.selectedSongId = song.id;
     }
-    if (!song.title || song.title === "Nova musica") song.title = file.name.replace(/\.[^.]+$/, "");
+    if (!song.title || song.title === "Nova música") song.title = file.name.replace(/\.[^.]+$/, "");
     song.fileName = file.name;
     await putMedia(`song:${song.id}`, file);
     state.audioUrls.set(song.id, URL.createObjectURL(file));
