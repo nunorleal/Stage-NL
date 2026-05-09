@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stage NL</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="main-grid">
+        <aside class="sidebar" aria-label="Navegação principal">
+          <div class="sidebar-brand">
+            <span class="brand-mark">NL</span>
+            <div>
+              <h1>Stage NL</h1>
+              <p>Repertório ao vivo</p>
+            </div>
+          </div>
+          <time id="mainClock" class="clock sidebar-clock">--:--</time>
+          <button class="nav-item active" data-view="library" type="button">Biblioteca</button>
+          <button class="nav-item" data-view="editor" type="button">Editor</button>
+          <button class="nav-item" data-view="playlists" type="button">Playlists</button>
+          <button class="nav-item" data-view="sampler" type="button">Sampler</button>
+          <button class="nav-item" data-view="settings" type="button">Definições</button>
+          <button class="nav-item stage-link" data-view="stage" type="button">Palco</button>
+        </aside>
+
+        <section id="library" class="view active">
+          <div class="section-head">
+            <div>
+              <h2>Biblioteca</h2>
+              <p>Organiza músicas por género, categoria ou espetáculo.</p>
+            </div>
+            <button id="newSong" type="button">Nova música</button>
+          </div>
+          <div class="filters">
+            <input id="searchSongs" type="search" placeholder="Pesquisar música, artista ou categoria">
+            <select id="categoryFilter" aria-label="Filtrar categoria">
+              <option value="">Todas as categorias</option>
+            </select>
+          </div>
+          <div id="songList" class="song-list"></div>
+        </section>
+
+        <section id="editor" class="view">
+          <div class="section-head">
+            <div>
+              <h2>Editor de sincronização</h2>
+              <p>Associa cada bloco da letra ao momento em que deve aparecer.</p>
+            </div>
+            <div class="section-actions">
+              <button id="deleteCurrentSong" class="danger-button" type="button">Apagar música</button>
+              <button id="saveSong" type="button">Guardar música</button>
+            </div>
+          </div>
+
+          <div class="editor-layout">
+            <form class="editor-form" autocomplete="off">
+              <label>
+                Título
+                <input id="songTitle" type="text" placeholder="Nome da música">
+              </label>
+              <label>
+                Artista
+                <input id="songArtist" type="text" placeholder="Artista">
+              </label>
+              <label>
+                Categoria / espetáculo
+                <input id="songCategory" type="text" placeholder="Ex: Baile, Cerimónia, Festa">
+              </label>
+              <label>
+                Género
+                <input id="songGenre" type="text" placeholder="Ex: Pop, Fado, Rock">
+              </label>
+              <label>
+                Áudio da música
+                <input id="audioImport" type="file" accept="audio/*">
+              </label>
+              <label>
+                Importar letra em bruto
+                <textarea id="lyricsInput" rows="10" placeholder="Opcional: cola aqui a letra completa. Usa uma linha vazia entre estrofes para gerar blocos."></textarea>
+              </label>
+              <div class="editor-tools">
+                <button id="parseLyrics" type="button">Criar blocos da letra</button>
+                <button id="markLine" type="button">Marcar bloco atual</button>
+                <button id="clearLyrics" class="ghost-button" type="button">Limpar tempos</button>
+              </div>
+            </form>
+
+            <div class="sync-panel">
+              <div class="mini-player">
+                <div id="editorNowPlaying">Sem musica selecionada</div>
+                <div class="transport-row">
+                  <button id="editorPlay" type="button">Play</button>
+                  <button id="editorPause" type="button">Pause</button>
+                  <button id="editorStop" type="button">Stop</button>
+                  <span id="editorTime">00:00 / 00:00</span>
+                </div>
+                <input id="editorSeek" type="range" min="0" max="1000" value="0">
+              </div>
+              <div class="editor-preview" aria-live="polite">
+                <div class="preview-head">
+                  <span>Preview palco</span>
+                  <strong id="previewCountdown">--</strong>
+                </div>
+                <div class="preview-cue-bar">
+                  <div id="previewCueFill" class="preview-cue-fill"></div>
+                </div>
+                <div id="editorPreviewStage" class="preview-stage"></div>
+              </div>
+              <div class="sync-head">
+                <div>
+                  <h3>Blocos da música</h3>
+                  <p>Edita aqui o que vai aparecer no palco.</p>
+                </div>
+                <button id="addBlock" type="button">Adicionar bloco</button>
+              </div>
+              <div id="syncLines" class="sync-lines" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="playlists" class="view">
+          <div class="section-head">
+            <div>
+              <h2>Playlists</h2>
+              <p>Prepara alinhamentos para atuações e consulta a próxima música.</p>
+            </div>
+            <button id="newPlaylist" type="button">Nova playlist</button>
+          </div>
+          <div class="playlist-layout">
+            <div id="playlistList" class="playlist-list"></div>
+            <div class="playlist-editor">
+              <input id="playlistName" type="text" placeholder="Nome da playlist">
+              <div id="playlistSongs" class="playlist-songs"></div>
+              <div class="add-song-row">
+                <select id="addSongSelect" aria-label="Adicionar música à playlist"></select>
+                <button id="addSongToPlaylist" type="button">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="sampler" class="view">
+          <div class="section-head">
+            <div>
+              <h2>Sampler</h2>
+              <p>Dispara efeitos por cima da música principal sem interromper a atuação.</p>
+            </div>
+            <button id="newPad" type="button">Novo pad</button>
+          </div>
+          <div class="sampler-top">
+            <input id="bankName" type="text" placeholder="Banco de sons / espetáculo">
+            <button id="stopEffects" class="danger-button" type="button">Parar efeitos</button>
+          </div>
+          <div id="padGrid" class="pad-grid"></div>
+        </section>
+
+        <section id="settings" class="view">
+          <div class="section-head">
+            <div>
+              <h2>Definições</h2>
+              <p>Importa, restaura e exporta dados da aplicação.</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <article class="settings-card">
+              <h3>Restaurar dados</h3>
+              <p>Importa um ficheiro JSON com músicas, letras, timestamps, playlists, categorias e definições.</p>
+              <label class="file-button ghost">
+                Restaurar JSON
+                <input id="dataImport" type="file" accept="application/json,.json">
+              </label>
+            </article>
+            <article class="settings-card">
+              <h3>Exportar dados</h3>
+              <p>Guarda uma copia completa dos dados para usar noutro browser ou dispositivo.</p>
+              <button id="exportData" type="button">Exportar ficheiro JSON</button>
+            </article>
+          </div>
+        </section>
+
+        <section id="stage" class="view stage-view">
+          <div class="stage-dashboard">
+            <button id="stagePrev" type="button">Anterior</button>
+            <button id="stagePlay" class="primary-live" type="button">Play</button>
+            <button id="stagePause" type="button">Pause</button>
+            <button id="stageStop" type="button">Stop</button>
+            <button id="stageFade" class="fade-button" type="button">Fade Out</button>
+            <button id="stageNext" type="button">Seguinte</button>
+            <button id="openPlaylist" type="button">Playlist</button>
+            <button class="nav-jump" data-view="library" type="button">Menu</button>
+            <time id="stageClock" class="clock">--:--</time>
+          </div>
+
+          <div class="stage-status">
+            <div>
+              <span id="stageSongTitle">Sem música</span>
+              <small id="stageNextSong">Próxima: --</small>
+            </div>
+          </div>
+
+          <div id="stageSeek" class="progress-wrap" role="slider" aria-label="Progresso da música" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+            <div id="songProgress" class="song-progress"></div>
+          </div>
+
+          <div class="stage-cue">
+            <span id="vocalCueLabel">Entrada vocal</span>
+            <strong id="vocalCountdown">--</strong>
+            <div class="vocal-cue-bar" aria-label="Progresso até à entrada vocal">
+              <div id="vocalCueFill" class="vocal-cue-fill"></div>
+            </div>
+          </div>
+
+          <div id="karaoke" class="karaoke" aria-live="polite"></div>
+
+          <div class="stage-sampler">
+            <div id="stagePads" class="stage-pads"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="playlistDialog" class="playlist-dialog">
+      <div class="dialog-head">
+        <h2>Playlist completa</h2>
+        <button id="closePlaylist" type="button">Fechar</button>
+      </div>
+      <ol id="fullPlaylist"></ol>
+    </dialog>
+
+    <audio id="mainAudio"></audio>
+    <script src="app.js"></script>
+  </body>
+</html>
